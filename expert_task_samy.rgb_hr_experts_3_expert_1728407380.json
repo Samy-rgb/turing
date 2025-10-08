@@ -1,0 +1,536 @@
+{
+  "env": "hr_experts",
+  "model_provider": "openai",
+  "model": "o4-mini",
+  "num_trials": 3,
+  "temperature": 1,
+  "interface_num": 3,
+  "task": {
+    "user_id": "1",
+    "instruction": "You are Johnny Jones (email: johnny.jones@protonmail.com), HR Director. Execute the complete integration of newly appointed Chief Technology Officer Dr. Alexandra Chen by establishing her executive profile, configuring comprehensive compensation and benefits, implementing specialized training programs for her leadership team, processing department budget allocations, and ensuring all regulatory compliance requirements are met for this C-level appointment. This executive integration must coordinate cross-functional approvals, establish reporting hierarchies, and maintain complete audit trails for compliance verification.",
+    "actions": [
+      {
+        "name": "verify_approval",
+        "arguments": {
+          "action": "executive_onboarding",
+          "requester_email": "johnny.jones@protonmail.com"
+        },
+        "output": {
+          "approval_id": "EXEC_ONBOARD_2025_001",
+          "status": "approved",
+          "approver_role": "hr_director",
+          "approval_timestamp": "2025-10-08T18:19:00Z"
+        }
+      },
+      {
+        "name": "process_user",
+        "arguments": {
+          "action": "create",
+          "user_data": {
+            "first_name": "Alexandra",
+            "last_name": "Chen",
+            "email": "alexandra.chen@company.com",
+            "phone_number": "+14155551234",
+            "role": "employee",
+            "status": "active",
+            "mfa_enabled": true
+          }
+        },
+        "output": {
+          "user_id": "147",
+          "first_name": "Alexandra",
+          "last_name": "Chen",
+          "email": "alexandra.chen@company.com",
+          "phone_number": "+14155551234",
+          "role": "employee",
+          "status": "active",
+          "mfa_enabled": true,
+          "created_at": "2025-10-08T18:19:00Z"
+        }
+      },
+      {
+        "name": "find_department_entities",
+        "arguments": {
+          "department_name": "Technology"
+        },
+        "output": {
+          "departments": [
+            {
+              "department_id": "5",
+              "department_name": "Technology",
+              "manager_id": null,
+              "budget": 2500000,
+              "status": "active"
+            }
+          ]
+        }
+      },
+      {
+        "name": "process_job_position",
+        "arguments": {
+          "action": "create",
+          "position_data": {
+            "title": "Chief Technology Officer",
+            "department_id": "5",
+            "salary_min": 280000,
+            "salary_max": 320000,
+            "employment_type": "full_time",
+            "status": "active",
+            "description": "Executive leadership role responsible for technology strategy and innovation"
+          }
+        },
+        "output": {
+          "position_id": "459",
+          "title": "Chief Technology Officer",
+          "department_id": "5",
+          "salary_min": 280000,
+          "salary_max": 320000,
+          "employment_type": "full_time",
+          "status": "active",
+          "created_at": "2025-10-08T18:19:15Z"
+        }
+      },
+      {
+        "name": "process_skill",
+        "arguments": {
+          "action": "create",
+          "skill_data": {
+            "name": "Executive Leadership",
+            "category": "Leadership",
+            "description": "C-level executive management and strategic planning"
+          }
+        },
+        "output": {
+          "skill_id": "201",
+          "name": "Executive Leadership",
+          "category": "Leadership",
+          "description": "C-level executive management and strategic planning",
+          "created_at": "2025-10-08T18:19:20Z"
+        }
+      },
+      {
+        "name": "process_job_position_skills",
+        "arguments": {
+          "action": "create",
+          "position_skill_data": {
+            "position_id": "459",
+            "skill_id": "201",
+            "requirement_level": "required",
+            "years_required": 10
+          }
+        },
+        "output": {
+          "position_skill_id": "1001",
+          "position_id": "459",
+          "skill_id": "201",
+          "requirement_level": "required",
+          "years_required": 10,
+          "created_at": "2025-10-08T18:19:25Z"
+        }
+      },
+      {
+        "name": "process_employee",
+        "arguments": {
+          "action": "create",
+          "employee_data": {
+            "user_id": "147",
+            "position_id": "459",
+            "hire_date": "2025-10-15",
+            "employment_status": "active",
+            "manager_id": null,
+            "date_of_birth": "1978-03-15",
+            "address": "2500 Sand Hill Road, Menlo Park, CA 94025",
+            "hourly_rate": 154
+          }
+        },
+        "output": {
+          "employee_id": "101",
+          "user_id": "147",
+          "position_id": "459",
+          "hire_date": "2025-10-15",
+          "employment_status": "active",
+          "manager_id": null,
+          "date_of_birth": "1978-03-15",
+          "address": "2500 Sand Hill Road, Menlo Park, CA 94025",
+          "hourly_rate": 154,
+          "created_at": "2025-10-08T18:19:30Z"
+        }
+      },
+      {
+        "name": "process_department",
+        "arguments": {
+          "action": "update",
+          "department_id": "5",
+          "department_data": {
+            "manager_id": "101",
+            "budget": 3200000
+          }
+        },
+        "output": {
+          "department_id": "5",
+          "department_name": "Technology",
+          "manager_id": "101",
+          "budget": 3200000,
+          "status": "active",
+          "updated_at": "2025-10-08T18:19:35Z"
+        }
+      },
+      {
+        "name": "find_benefits_entities",
+        "arguments": {
+          "plan_name": "Executive Premium"
+        },
+        "output": {
+          "benefits_plans": [
+            {
+              "plan_id": "15",
+              "plan_name": "Executive Premium",
+              "plan_type": "comprehensive",
+              "monthly_premium": 2500,
+              "coverage_details": "Executive-level comprehensive coverage"
+            }
+          ]
+        }
+      },
+      {
+        "name": "process_employee_benefits",
+        "arguments": {
+          "action": "create",
+          "employee_benefits_data": {
+            "employee_id": "101",
+            "plan_id": "15",
+            "enrollment_date": "2025-10-15",
+            "coverage_start_date": "2025-10-15",
+            "premium_amount": 2500,
+            "employer_contribution": 2500
+          }
+        },
+        "output": {
+          "employee_benefit_id": "501",
+          "employee_id": "101",
+          "plan_id": "15",
+          "enrollment_date": "2025-10-15",
+          "coverage_start_date": "2025-10-15",
+          "premium_amount": 2500,
+          "employer_contribution": 2500,
+          "created_at": "2025-10-08T18:19:40Z"
+        }
+      },
+      {
+        "name": "find_training_entities",
+        "arguments": {
+          "program_name": "Executive Leadership Development"
+        },
+        "output": {
+          "training_programs": [
+            {
+              "program_id": "25",
+              "program_name": "Executive Leadership Development",
+              "duration_hours": 40,
+              "certification_required": true,
+              "target_level": "executive"
+            }
+          ]
+        }
+      },
+      {
+        "name": "process_employee_training",
+        "arguments": {
+          "action": "create",
+          "employee_training_data": {
+            "employee_id": "101",
+            "program_id": "25",
+            "enrollment_date": "2025-10-20",
+            "target_completion_date": "2025-11-30",
+            "status": "enrolled",
+            "priority_level": "high"
+          }
+        },
+        "output": {
+          "employee_training_id": "301",
+          "employee_id": "101",
+          "program_id": "25",
+          "enrollment_date": "2025-10-20",
+          "target_completion_date": "2025-11-30",
+          "status": "enrolled",
+          "priority_level": "high",
+          "created_at": "2025-10-08T18:19:45Z"
+        }
+      },
+      {
+        "name": "process_payroll_record",
+        "arguments": {
+          "action": "create",
+          "payroll_data": {
+            "employee_id": "101",
+            "pay_period_start": "2025-10-15",
+            "pay_period_end": "2025-10-31",
+            "regular_hours": 80,
+            "overtime_hours": 0,
+            "gross_salary": 12320,
+            "pay_frequency": "bi_weekly"
+          }
+        },
+        "output": {
+          "payroll_record_id": "701",
+          "employee_id": "101",
+          "pay_period_start": "2025-10-15",
+          "pay_period_end": "2025-10-31",
+          "regular_hours": 80,
+          "overtime_hours": 0,
+          "gross_salary": 12320,
+          "pay_frequency": "bi_weekly",
+          "created_at": "2025-10-08T18:19:50Z"
+        }
+      },
+      {
+        "name": "process_payroll_deduction",
+        "arguments": {
+          "action": "create",
+          "deduction_data": {
+            "payroll_record_id": "701",
+            "deduction_type": "executive_benefits",
+            "deduction_amount": 0,
+            "description": "Executive benefits - employer paid"
+          }
+        },
+        "output": {
+          "deduction_id": "801",
+          "payroll_record_id": "701",
+          "deduction_type": "executive_benefits",
+          "deduction_amount": 0,
+          "description": "Executive benefits - employer paid",
+          "created_at": "2025-10-08T18:19:55Z"
+        }
+      },
+      {
+        "name": "process_document_storage",
+        "arguments": {
+          "action": "create",
+          "document_data": {
+            "employee_id": "101",
+            "document_type": "executive_contract",
+            "file_name": "chen_alexandra_cto_contract.pdf",
+            "file_size": 2048000,
+            "security_level": "confidential",
+            "retention_years": 7
+          }
+        },
+        "output": {
+          "document_id": "901",
+          "employee_id": "101",
+          "document_type": "executive_contract",
+          "file_name": "chen_alexandra_cto_contract.pdf",
+          "file_size": 2048000,
+          "security_level": "confidential",
+          "retention_years": 7,
+          "created_at": "2025-10-08T18:20:00Z"
+        }
+      },
+      {
+        "name": "process_performance_review",
+        "arguments": {
+          "action": "create",
+          "performance_data": {
+            "employee_id": "101",
+            "review_period": "2025-Q4",
+            "review_type": "executive_90_day",
+            "scheduled_date": "2025-12-15",
+            "reviewer_id": "1",
+            "status": "scheduled"
+          }
+        },
+        "output": {
+          "performance_review_id": "201",
+          "employee_id": "101",
+          "review_period": "2025-Q4",
+          "review_type": "executive_90_day",
+          "scheduled_date": "2025-12-15",
+          "reviewer_id": "1",
+          "status": "scheduled",
+          "created_at": "2025-10-08T18:20:05Z"
+        }
+      },
+      {
+        "name": "process_audit_logs",
+        "arguments": {
+          "action": "create",
+          "audit_data": {
+            "user_id": "1",
+            "action_type": "executive_onboarding_complete",
+            "target_entity_type": "employee",
+            "target_entity_id": "101",
+            "details": "Complete executive integration workflow for CTO Alexandra Chen",
+            "compliance_category": "C_level_appointment"
+          }
+        },
+        "output": {
+          "audit_log_id": "1001",
+          "user_id": "1",
+          "action_type": "executive_onboarding_complete",
+          "target_entity_type": "employee",
+          "target_entity_id": "101",
+          "details": "Complete executive integration workflow for CTO Alexandra Chen",
+          "compliance_category": "C_level_appointment",
+          "timestamp": "2025-10-08T18:20:10Z"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "instruction",
+        "to": "verify_approval",
+        "connection": {
+          "output": "requester_email, action",
+          "input": "requester_email, action"
+        }
+      },
+      {
+        "from": "verify_approval",
+        "to": "process_user",
+        "connection": {
+          "output": "approval_id",
+          "input": "approval_dependency"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "process_user",
+        "connection": {
+          "output": "user_data",
+          "input": "user_data"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "find_department_entities",
+        "connection": {
+          "output": "department_name",
+          "input": "department_name"
+        }
+      },
+      {
+        "from": "find_department_entities",
+        "to": "process_job_position",
+        "connection": {
+          "output": "departments[0].department_id",
+          "input": "position_data.department_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "process_job_position",
+        "connection": {
+          "output": "position_details",
+          "input": "position_data"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "process_skill",
+        "connection": {
+          "output": "skill_requirements",
+          "input": "skill_data"
+        }
+      },
+      {
+        "from": "process_job_position",
+        "to": "process_job_position_skills",
+        "connection": {
+          "output": "position_id",
+          "input": "position_skill_data.position_id"
+        }
+      },
+      {
+        "from": "process_skill",
+        "to": "process_job_position_skills",
+        "connection": {
+          "output": "skill_id",
+          "input": "position_skill_data.skill_id"
+        }
+      },
+      {
+        "from": "process_user",
+        "to": "process_employee",
+        "connection": {
+          "output": "user_id",
+          "input": "employee_data.user_id"
+        }
+      },
+      {
+        "from": "process_job_position",
+        "to": "process_employee",
+        "connection": {
+          "output": "position_id",
+          "input": "employee_data.position_id"
+        }
+      },
+      {
+        "from": "process_employee",
+        "to": "process_department",
+        "connection": {
+          "output": "employee_id",
+          "input": "department_data.manager_id"
+        }
+      },
+      {
+        "from": "find_department_entities",
+        "to": "process_department",
+        "connection": {
+          "output": "departments[0].department_id",
+          "input": "department_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "find_benefits_entities",
+        "connection": {
+          "output": "benefits_requirements",
+          "input": "plan_name"
+        }
+      },
+      {
+        "from": "process_employee",
+        "to": "process_employee_benefits",
+        "connection": {
+          "output": "employee_id",
+          "input": "employee_benefits_data.employee_id"
+        }
+      },
+      {
+        "from": "find_benefits_entities",
+        "to": "process_employee_benefits",
+        "connection": {
+          "output": "benefits_plans[0].plan_id",
+          "input": "employee_benefits_data.plan_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "find_training_entities",
+        "connection": {
+          "output": "training_requirements",
+          "input": "program_name"
+        }
+      },
+      {
+        "from": "process_employee",
+        "to": "process_employee_training",
+        "connection": {
+          "output": "employee_id",
+          "input": "employee_training_data.employee_id"
+        }
+      },
+      {
+        "from": "find_training_entities",
+        "to": "process_employee_training",
+        "connection": {
+          "output": "training_programs[0].program_id",
+          "input": "employee_training_data.program_id"
+        }
+      }
+    ],
+    "outputs": [],
+    "num_edges": 19
+  }
+}
