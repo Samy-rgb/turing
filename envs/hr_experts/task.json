@@ -1,0 +1,266 @@
+{
+  "task_id": "hr-expert-3-workflow",
+  "title": "Comprehensive HR Management System Expert Task",
+  "description": "Expert HR management system task implementing complete employee lifecycle workflows with policy compliance, data validation, and audit trail logging. Follows comprehensive SOPs for recruitment, onboarding, payroll, benefits, and performance management.",
+  "model": "qwen3-coder-480b-a35b-instruct",
+  "model_provider": "fireworks",
+  "environment": {
+    "data_path": "envs/hr_experts/data/",
+    "tools_path": "envs/hr_experts/tools/interface_3/",
+    "policy_file": "envs/hr_experts/tools/interface_3/policy.md"
+  },
+  "graph": {
+    "nodes": {
+      "start": {
+        "type": "start",
+        "description": "Initialize HR management task with user request validation",
+        "next": ["validate_request"]
+      },
+      "validate_request": {
+        "type": "validation",
+        "description": "Validate incoming HR request against policy requirements and extract entities",
+        "tools": ["discover_user_employee_entities", "check_approval"],
+        "data_sources": ["users.json", "employees.json", "approvals.json"],
+        "next": ["determine_workflow"]
+      },
+      "determine_workflow": {
+        "type": "router",
+        "description": "Route request to appropriate HR workflow based on operation type",
+        "routing_logic": {
+          "recruitment": ["recruitment_flow"],
+          "employee_management": ["employee_flow"],
+          "payroll": ["payroll_flow"],
+          "benefits": ["benefits_flow"],
+          "performance": ["performance_flow"],
+          "compliance": ["compliance_flow"]
+        },
+        "next": ["recruitment_flow", "employee_flow", "payroll_flow", "benefits_flow", "performance_flow", "compliance_flow"]
+      },
+      "recruitment_flow": {
+        "type": "workflow",
+        "description": "Handle recruitment operations: job posting, candidate management, applications, interviews",
+        "tools": [
+          "discover_recruitment_entities",
+          "discover_job_entities",
+          "manage_job_position",
+          "manage_candidate",
+          "manage_job_application",
+          "manage_interview"
+        ],
+        "data_sources": [
+          "job_positions.json",
+          "candidates.json",
+          "job_applications.json",
+          "interviews.json",
+          "job_position_skills.json",
+          "skills.json"
+        ],
+        "sops": [
+          "Create/Update Job Position",
+          "Post Job Opening",
+          "Adding Candidate Record",
+          "Create/Update Job Application",
+          "Schedule Interview",
+          "Record Interview Outcome"
+        ],
+        "next": ["audit_log"]
+      },
+      "employee_flow": {
+        "type": "workflow",
+        "description": "Handle employee lifecycle: onboarding, profile updates, department management, offboarding",
+        "tools": [
+          "discover_user_employee_entities",
+          "discover_department_entities",
+          "manage_employee",
+          "manage_user",
+          "manage_department"
+        ],
+        "data_sources": [
+          "employees.json",
+          "users.json",
+          "departments.json",
+          "employee_timesheets.json"
+        ],
+        "sops": [
+          "User Provisioning",
+          "Create/Update Department",
+          "Employee Onboarding",
+          "Update Employee Profile",
+          "Employee Offboarding"
+        ],
+        "next": ["audit_log"]
+      },
+      "payroll_flow": {
+        "type": "workflow",
+        "description": "Handle payroll operations: timesheet processing, payroll runs, deductions, corrections",
+        "tools": [
+          "discover_timesheet_entities",
+          "discover_payroll_entities",
+          "manage_timesheet_entries",
+          "manage_payroll_record",
+          "manage_payroll_deduction"
+        ],
+        "data_sources": [
+          "employee_timesheets.json",
+          "payroll_records.json",
+          "payroll_deductions.json"
+        ],
+        "sops": [
+          "Timesheet Submission",
+          "Timesheet Approval/Correction",
+          "Process Payroll Run",
+          "Payroll Correction",
+          "Payroll Deductions Management"
+        ],
+        "next": ["audit_log"]
+      },
+      "benefits_flow": {
+        "type": "workflow",
+        "description": "Handle benefits management: plan creation, employee enrollments, updates",
+        "tools": [
+          "discover_benefits_entities",
+          "manage_benefits_plan",
+          "manage_employee_benefits"
+        ],
+        "data_sources": [
+          "benefits_plans.json",
+          "employee_benefits.json"
+        ],
+        "sops": [
+          "Create/Update Benefits Plan",
+          "Employee Benefits Enrollment & Update"
+        ],
+        "next": ["audit_log"]
+      },
+      "performance_flow": {
+        "type": "workflow",
+        "description": "Handle performance management: reviews, training programs, employee development",
+        "tools": [
+          "discover_performance_entities",
+          "discover_training_entities",
+          "manage_performance_review",
+          "manage_training_programs",
+          "manage_employee_training"
+        ],
+        "data_sources": [
+          "performance_reviews.json",
+          "training_programs.json",
+          "employee_training.json"
+        ],
+        "sops": [
+          "Performance Review Cycle",
+          "Create/Update Training Program",
+          "Employee Training Enrollment & Completion"
+        ],
+        "next": ["audit_log"]
+      },
+      "compliance_flow": {
+        "type": "workflow",
+        "description": "Handle compliance operations: document management, leave requests, expense reimbursements",
+        "tools": [
+          "discover_document_entities",
+          "discover_leave_entities",
+          "discover_expense_entities",
+          "manage_document_storage",
+          "manage_leave_requests",
+          "manage_expense_reimbursements"
+        ],
+        "data_sources": [
+          "document_storage.json",
+          "leave_requests.json",
+          "expense_reimbursements.json"
+        ],
+        "sops": [
+          "Document Upload & Management",
+          "Leave Request Processing",
+          "Create/Update Expense Reimbursement",
+          "Process Expense Reimbursement"
+        ],
+        "next": ["audit_log"]
+      },
+      "audit_log": {
+        "type": "logging",
+        "description": "Create comprehensive audit trail entry for all HR operations",
+        "tools": ["manage_audit_logs"],
+        "data_sources": ["audit_logs.json"],
+        "required": true,
+        "next": ["policy_compliance"]
+      },
+      "policy_compliance": {
+        "type": "validation",
+        "description": "Verify all operations comply with HR policy requirements and approval workflows",
+        "tools": ["check_approval"],
+        "data_sources": ["approvals.json"],
+        "halt_conditions": [
+          "missing_approvals",
+          "invalid_status_transition",
+          "compliance_violation"
+        ],
+        "next": ["escalation_check"]
+      },
+      "escalation_check": {
+        "type": "decision",
+        "description": "Check if any halt conditions were triggered requiring human escalation",
+        "routing_logic": {
+          "halt_required": ["escalate_human"],
+          "success": ["finalize_response"]
+        },
+        "next": ["escalate_human", "finalize_response"]
+      },
+      "escalate_human": {
+        "type": "escalation",
+        "description": "Transfer request to human agent when policy halt conditions are met",
+        "tools": ["transfer_to_human"],
+        "message": "Cannot continue the process due to policy violations or missing approvals",
+        "next": ["end"]
+      },
+      "finalize_response": {
+        "type": "response",
+        "description": "Generate final response with operation results, audit trail reference, and next steps",
+        "output_format": {
+          "status": "success|failed|escalated",
+          "operation_type": "string",
+          "entities_affected": "array",
+          "audit_trail_id": "string",
+          "next_steps": "array",
+          "compliance_status": "compliant|non_compliant|pending"
+        },
+        "next": ["end"]
+      },
+      "end": {
+        "type": "end",
+        "description": "Task completion with comprehensive logging and cleanup"
+      }
+    }
+  },
+  "execution_flow": {
+    "single_turn": true,
+    "max_iterations": 1,
+    "timeout_seconds": 300,
+    "error_handling": "halt_and_escalate"
+  },
+  "policy_requirements": {
+    "validation_first": true,
+    "comprehensive_logging": true,
+    "role_based_permissions": true,
+    "approval_workflows": true,
+    "halt_on_violations": true
+  },
+  "data_schemas": {
+    "employee": {
+      "required_fields": ["employee_id", "user_id", "position_id", "hire_date", "employment_status"],
+      "optional_fields": ["manager_id", "date_of_birth", "address", "hourly_rate"]
+    },
+    "audit_log": {
+      "required_fields": ["action_type", "entity_type", "entity_id", "user_id", "timestamp", "result"],
+      "optional_fields": ["before_values", "after_values", "details"]
+    }
+  },
+  "quality_metrics": {
+    "code_maintainability": "high",
+    "readability_score": "excellent",
+    "policy_compliance": "100%",
+    "audit_coverage": "complete",
+    "error_handling": "comprehensive"
+  }
+}
